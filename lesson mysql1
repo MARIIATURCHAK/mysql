@@ -20,15 +20,21 @@ select * from cars where model='audi'  and year<2014;
 -- найти первые 5 машин
 select * from cars limit 5;
 -- найти последнии 5 машин
-select * from cars limit 5 offset 212;
+select * from cars order by id desc limit 5;
 -- найти среднее арифметическое цен машин модели KIA
-
+select avg(price) as avg_price, model from cars where model='kia';
 -- найти среднее арифметическое цен каждой машины
+select avg(price) as avg_price, model from cars group by model;
 -- посчитать количество каждой марки машин
+select count(model) as count_model, model from cars group by model;
 -- найти марку машины количество которых больше всего
-
+select count(model) as count_model, model from cars group by model order by count_model desc limit 1;
 -- найти все машины в модели которых вторая и предпоследняя буква "а"
+select * from cars  where model like '_a%a_';
 -- найти все машины модели которых больше 8 символов
-
+select * from cars  where length(model) > 8;
 -- ***найти машины цена которых больше чем цена среднего арифметического всех машин
+select avg(price) from cars;
+select * from cars where price > (select avg(price) from cars);
+
 
