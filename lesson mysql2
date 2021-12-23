@@ -30,35 +30,78 @@ select * from client;
 select * from client join application a on client.idClient = a.Client_idClient
 where sum > 5000;
 -- 9.Порахувати кількість клієнтів усіх відділень та лише львівських відділень.
-select count(*) as max
+select count(*) as quantity
   from client
 	join department d on d.idDepartment = client.Department_idDepartment
 union
-select count(*) as max
+select count(*)
   from client
 	join department d2 on d2.idDepartment = client.Department_idDepartment
 where  departmentcity = 'lviv';
 -- 10.Знайти кредити, які мають найбільшу суму для кожного клієнта окремо.
-select * from client
-	join application a on client.idClient = a.Client_idClient;
+select max(sum) as max_sum, idClient, FirstName, LastName
+ from client
+	join application a on client.idClient = a.Client_idClient
+    group by idclient;
 
 
-
-
-
+select max(Sum) as max_credit, client.*
+from client
+         join application a on client.idClient = a.Client_idClient
+group by idClient, FirstName, LastName;
 -- 11. Визначити кількість заявок на крдеит для кожного клієнта.
+select count(*) as quantity_application, idClient, FirstName, LastName
+from client
+	join application a on client.idClient = a.Client_idClient
+    group by idClient, FirstName, LastName;
+
+   select count(*), idClient, FirstName, LastName
+from client
+         join application a on client.idClient = a.Client_idClient
+group by idClient, FirstName, LastName;
 
 -- 12. Визначити найбільший та найменший кредити.
+select * from application;
+select max(sum) as max_sum from application;
+select min(sum) as min_sum from application;
+
+select min(Sum) as min, max(Sum) as max
+from application;
 
 -- 13. Порахувати кількість кредитів для клієнтів,які мають вищу освіту.
 
+select count(*) as quantity_credit, idClient, FirstName, LastName education
+ from client
+	join application a on client.idClient = a.Client_idClient
+    where education = 'high'
+    group by idClient, FirstName, LastName, education;
+
 -- 14. Вивести дані про клієнта, в якого середня сума кредитів найвища.
+select avg(sum) as avg, client.*
+ from client
+	join application a on client.idClient = a.Client_idClient
+    group by idClient
+    order by avg desc
+    limit 1;
 
 -- 15. Вивести відділення, яке видало в кредити найбільше грошей
+select sum(Sum) as sum, idDepartment, DepartmentCity
+from department
+         join client c on department.idDepartment = c.Department_idDepartment
+         join application a on c.idClient = a.Client_idClient
+group by DepartmentCity, idDepartment
+order by sum desc
+limit 1;
 
 -- 16. Вивести відділення, яке видало найбільший кредит.
+select * from client
+	join application a on client.idClient = a.Client_idClient
+    join department d on d.idDepartment = client.Department_idDepartment;
 
 -- 17. Усім клієнтам, які мають вищу освіту, встановити усі їхні кредити у розмірі 6000 грн.
+select * from client
+	join application a on client.idClient = a.Client_idClient
+    join department d on d.idDepartment = client.Department_idDepartment;
 
 -- 18. Усіх клієнтів київських відділень пересилити до Києва.
 
