@@ -94,23 +94,40 @@ order by sum desc
 limit 1;
 
 -- 16. Вивести відділення, яке видало найбільший кредит.
-select * from client
-	join application a on client.idClient = a.Client_idClient
-    join department d on d.idDepartment = client.Department_idDepartment;
+select max(sum) as sum, idDepartment, DepartmentCity
+from department
+         join client c on department.idDepartment = c.Department_idDepartment
+         join application a on c.idClient = a.Client_idClient
+         group by iddepartment
+         order by idDepartment, DepartmentCity
+         limit 1;
 
 -- 17. Усім клієнтам, які мають вищу освіту, встановити усі їхні кредити у розмірі 6000 грн.
-select * from client
-	join application a on client.idClient = a.Client_idClient
-    join department d on d.idDepartment = client.Department_idDepartment;
+update application join client c on c.idClient = application.Client_idClient
+set sum = 6000
+where education = 'high';
 
 -- 18. Усіх клієнтів київських відділень пересилити до Києва.
+update client join department d on d.idDepartment = client.Department_idDepartment
+set city = 'Kyiv'
+where departmentCity = 'Kyiv';
 
 -- 19. Видалити усі кредити, які є повернені.
+delete application from application where CreditState like 'returned';
 
 -- 20. Видалити кредити клієнтів, в яких друга літера прізвища є голосною.
+-- delete application from application join client c on c.idClient = application.Client_idClient
+--     where lastname like '_a%' and lastname like 'e%' and lastname like'_u%' and lastname like'_o%' and lastname like '_y%';
+
+   delete application
+from application
+         join client c on c.idClient = application.Client_idClient
+where LastName regexp '^.[eyuoa].*';
 
 -- 21.Знайти львівські відділення, які видали кредитів на загальну суму більше ніж 5000
-
+select * from department
+	join application a on client.idClient = a.Client_idClient
+    join department d on d.idDepartment = client.Department_idDepartment;
 -- 22.Знайти клієнтів, які повністю погасили кредити на суму більше ніж 5000
 
 -- 23.Знайти максимальний неповернений кредит.
